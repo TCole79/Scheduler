@@ -21,7 +21,57 @@ const days = [
   },
 ];
 
+const appointments = [
+  {
+    id: 1,
+    time: "12pm",
+  },
+  {
+    id: 2,
+    time: "1pm",
+    interview: {
+      student: "Lydia Miller-Jones",
+      interviewer:{
+        id: 3,
+        name: "Sylvia Palmer",
+        avatar: "https://i.imgur.com/LpaY82x.png",
+      }
+    }
+  },
+  {
+    id: 3,
+    time: "2pm",
+  },
+  {
+    id: 4,
+    time: "3pm",
+    interview: {
+      student: "Archie Andrews",
+      interviewer:{
+        id: 4,
+        name: "Cohana Roy",
+        avatar: "https://i.imgur.com/FK8V841.jpg",
+      }
+    }
+  },
+  {
+    id: 5,
+    time: "4pm",
+  }
+];
+
+
 export default function Application(props) {
+
+  const showAppointments = appointments.map((appointment) => (
+    <Appointment
+      key={appointment.id}
+      id={appointment.id}
+      time={appointment.time}
+      interview={appointment.interview}
+    />
+  ));
+
   const [day, setDay] = useState("Monday");
 
   return (
@@ -43,15 +93,8 @@ export default function Application(props) {
         />
       </section>
       <section className="schedule">
-        const appointmentTimes = appointments.map((day) =>(
-        <Appointment
-          key={day.id}
-          name={day.name}
-          spots={day.spots}
-          selected={day.name === props.value}
-          setDay={props.onChange}
-        />
-        ) )
+        {showAppointments}
+        <Appointment key="last" time="5pm" />
       </section>
     </main>
   );
