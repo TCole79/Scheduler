@@ -1,5 +1,4 @@
 /////----- HELPER FUNCTIONS -----/////
-
 export function getAppointmentsForDay(state, day) {
   //... returns an array of appointments for that day
   const filteredAppointments = [];
@@ -23,14 +22,11 @@ export function getAppointmentsForDay(state, day) {
   return filteredAppointments;
 }
 
-
-
-
+/////----- GETINTERVIEW -----/////
 export function getInterview(state, interview) {
   if (!interview) {
     return null;
   }
-
   let interviewer = state.interviewers[interview.interviewer]; // state is current state, then we access the interviewers object, then we access the interviewer id
   return { ...interview, interviewer }; // we are creating an object, containing the interview properties (student + interviewer as a number) then after the , we add another key to the object which is the 'interviewer'
 }
@@ -45,3 +41,22 @@ const newObject = {
     avatar: 'url/here', id:7, name:'Interviewer Name'
   }
 } */
+
+/////-----GETINTERVIEWERSFORDAY -----/////
+export function getInterviewersForDay(state, day) {
+  const filteredInterviewers = [];
+
+  const filteredInterviewer = state.days.filter((weekday) => weekday.name === day)[0]; // {} | undefined
+
+  if (!filteredInterviewer) {
+    return [];
+  }
+  filteredInterviewer.appointments.forEach((appointment) => {
+    const matchedInterviewer = state.appointments[appointment]; // { id: 4, time: "3pm", interview: null } | undefined
+    if (matchedInterviewer) {
+      filteredInterviewers.push(matchedInterviewer);
+    }
+  });
+
+  return filteredInterviewers;
+}

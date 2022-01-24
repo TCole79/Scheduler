@@ -3,7 +3,7 @@ import "components/Application.scss";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
 import Axios from "axios";
-import { getAppointmentsForDay, getInterview } from "helpers/selectors";
+import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
 import useVisualMode from "hooks/useVisualMode";
 
 export default function Application(props) {
@@ -17,18 +17,20 @@ export default function Application(props) {
   
   const setDay = (day) => setState({ ...state, day }); // added this as part of the refactor
 
-  //const showInterviewers = getInterviewersForDay(state, state.day); // get interviewers for each day specified
+  const interviewers = getInterviewersForDay(state, state.day); // get interviewers for each day specified
   const appointments = getAppointmentsForDay(state, state.day); // get appointments for each day specified
 
   const schedule = appointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
+    //console.log("interview test ", interview);
     return (
-      // alternate code for below Appointment = <Appointment key={appointment.id} {...appointment} />
+      // alternate code for below Appointment parts (key, id, time)= <Appointment key={appointment.id} {...appointment} />
       <Appointment
         key={appointment.id}
         id={appointment.id}
         time={appointment.time}
         interview={interview}
+        interviewers={interviewers}
       />
     );
   });
