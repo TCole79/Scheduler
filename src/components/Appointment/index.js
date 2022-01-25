@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import "components/Appointment/styles.scss";
 import Header from "./Header";
 import Show from "./Show";
@@ -6,6 +6,7 @@ import Empty from "./Empty";
 import Form from "./Form";
 import Status from "./Status";
 import Confirm from "./Confirm";
+import Error from "./Error";
 
 import useVisualMode from "hooks/useVisualMode";
 
@@ -16,6 +17,8 @@ const SAVING = "SAVING";
 const DELETING = "DELETING";
 const CONFIRM_DELETE = "CONFIRM_DELETE";
 const EDIT = "EDIT";
+const ERROR_SAVE = "ERROR_SAVE";
+const ERROR_DELETE = "ERROR_DELETE";
 
 export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(
@@ -28,16 +31,27 @@ export default function Appointment(props) {
       student: name,
       interviewer,
     };
-    transition(SAVING); // this shows the saving transition
-    props.bookInterview(props.id, interview).then(() => {
-      transition(SHOW); // this calls the transition function, with 'SHOW' as the argument
-    });
+    transition(SAVING); // this shows the saving transition, with 'SAVING' as the argument
+    props
+      .bookInterview(props.id, interview) // returns a promise
+      .then(() => {
+        transition(SHOW); // this calls the transition function, with 'SHOW' as the argument
+      })
+      .catch(() => {
+        transition(ERROR_SAVE, true);
+      });
   }
   /////----- DELETE -----/////
-  function cancel() {
-    //transition(CONFIRM)
-    transition(DELETING);
-    props.cancelInterview(props.id).then(() => transition(EMPTY));
+  function cancel(event) {
+    transition(DELETING, true);
+    props
+      .cancelInterview(props.id)
+      .then(() => {
+        transition(EMPTY);
+      })
+      .catch(() => {
+        transition(ERROR_DELETE, true);
+      });
   }
   /////----- CONFIRM DELETE -----/////
   function confirmDelete() {
@@ -45,7 +59,7 @@ export default function Appointment(props) {
   }
   /////----- EDIT -----/////
   function edit() {
-    transition(EDIT)
+    transition(EDIT);
   }
 
   return (
@@ -74,6 +88,7 @@ export default function Appointment(props) {
         <Confirm
           message="Are you certain you want to cancel?"
           onConfirm={cancel}
+          onCancel={back} // this links to the 'back' state & useVisualmode
         />
       )}
       {mode === EDIT && (
@@ -82,6 +97,19 @@ export default function Appointment(props) {
           interviewer={props.interview.interviewer}
           interviewers={props.interviewers}
           onSave={save}
+          onCancel={back} // this links to the 'back' state & useVisualmode
+        />
+      )}
+      {mode === ERROR_SAVE && (
+        <Error
+          message="Could not save appointment. Please try again."
+          onCancel={back} // this links to the 'back' state & useVisualmode
+        />
+      )}
+      {mode === ERROR_DELETE && (
+        <Error
+          message="Could not delete appointment. Please try again."
+          onCancel={back} // this links to the 'back' state & useVisualmode
         />
       )}
     </article>
