@@ -12,7 +12,6 @@ export function getAppointmentsForDay(state, day) {
   }
 
   foundDay.appointments.forEach((appointment) => {
-    console.log(foundDay);
     const matchedAppointment = state.appointments[appointment];
     if (matchedAppointment) {
       filteredAppointments.push(matchedAppointment);
@@ -56,8 +55,8 @@ export function getInterviewersForDay(state, day) {
   });
 
   return filteredInterviewers;
-}
-*/
+} */
+
 export function getInterviewersForDay(state, day) {
   const filteredInterviewers = [];
 

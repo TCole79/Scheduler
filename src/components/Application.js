@@ -35,7 +35,7 @@ export default function Application(props) {
       Promise.resolve(fetchInterviewers),
     ])
       .then((response) => {
-        console.log("Response check: ", response);
+        //console.log("Response check: ", response);
         setState((prev) => ({
           ...prev,
           days: response[0].data,
@@ -79,12 +79,10 @@ export default function Application(props) {
   /////----- DELETE -----/////
   function cancelInterview(id) {
     const appointment = {
-      // delete appointment
       ...state.appointments[id],
       interview: null,
     };
     const appointments = {
-      // add the new appointment to the list of appointments
       ...state.appointments,
       [id]: appointment,
     };
