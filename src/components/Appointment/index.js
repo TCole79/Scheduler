@@ -4,6 +4,7 @@ import Header from "./Header";
 import Show from "./Show";
 import Empty from "./Empty";
 import Form from "./Form";
+import Status from "./Status";
 
 import useVisualMode from "hooks/useVisualMode";
 
@@ -11,12 +12,12 @@ const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
 const SAVING = "SAVING";
+const DELETING = "DELETING";
 
 export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
-  //console.log("props.interview.student test ", mode === SHOW && props.interview.student);
 
   /////----- SAVE -----/////
   function save(name, interviewer) {
@@ -24,14 +25,15 @@ export default function Appointment(props) {
       student: name,
       interviewer,
     };
-    transition(SAVING) // this shows the saving transition
-    props
-      .bookInterview(props.id, interview)
-      .then(() => {
-        transition(SHOW); // this calls the transition function, with 'SHOW' as the argument
-        console.log("transition check ", transition);
-      })
-      // .catch((err) => {});
+    transition(SAVING); // this shows the saving transition
+    props.bookInterview(props.id, interview).then(() => {
+      transition(SHOW); // this calls the transition function, with 'SHOW' as the argument
+    });
+  }
+  /////----- DELETE -----/////
+  function cancel() {
+    transition(DELETING);
+    props.cancelInterview(props.id).then(() => transition(EMPTY));
   }
 
   return (
@@ -42,6 +44,8 @@ export default function Appointment(props) {
         <Show
           student={props.interview.student}
           interviewer={props.interview.interviewer}
+          interviewers={props.interviewers}
+          onDelete={cancel}
         />
       )}
       {mode === CREATE && (
@@ -51,7 +55,8 @@ export default function Appointment(props) {
           onSave={save}
         />
       )}
-      {mode === SAVING}
+      {mode === SAVING && <Status message="Saving" />}
+      {mode === DELETING && <Status message="Deleting" />}
     </article>
   );
 }

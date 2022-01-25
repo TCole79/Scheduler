@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "components/Application.scss";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
-import Axios from "axios";
+import axios from "axios";
 import {
   getAppointmentsForDay,
   getInterviewersForDay,
@@ -14,17 +14,18 @@ export default function Application(props) {
   const [state, setState] = useState({
     day: "Monday", // The day string is a direct child of the state object
     days: [], // The days array is a direct child of the state object
-    appointments: {}, // The appointments object is a direct child of the state object, originally set to null it will set to an object when we book an interview
-    interviewers: {}, // The interviewers object is a direct child of the state object
+    appointments: {}, // This object is a direct child of the state object, originally set to null it will set to an object when we book an interview
+    interviewers: {}, // This object is a direct child of the state object
+    cancelInterview: {},
   });
 
   // Intital request to get all the data from the three endpoints, days, appointments, interviewers
   useEffect(() => {
-    const fetchDays = Axios.get("http://localhost:8001/api/days");
-    const fetchAppointments = Axios.get(
+    const fetchDays = axios.get("http://localhost:8001/api/days");
+    const fetchAppointments = axios.get(
       "http://localhost:8001/api/appointments"
     );
-    const fetchInterviewers = Axios.get(
+    const fetchInterviewers = axios.get(
       "http://localhost:8001/api/interviewers"
     );
 
@@ -53,30 +54,47 @@ export default function Application(props) {
   const appointments = getAppointmentsForDay(state, state.day); // get appointments for each day specified
 
   /////----- BOOK INTERVIEW -----/////
-  function bookInterview(id, interview) { // this books a new interview
-    console.log("id and interview test ", id, interview);
+  function bookInterview(id, interview) {
+    // this books a new interview
+    //console.log("id and interview test ", id, interview);
 
-    const appointment = { // create new appointment
+    const appointment = {
+      // create new appointment
       ...state.appointments[id],
-      interview: { ...interview }
+      interview: { ...interview },
     };
-    const appointments = { // add the new appointment to the list of appointments
+    const appointments = {
+      // add the new appointment to the list of appointments
       ...state.appointments,
-      [id]: appointment
+      [id]: appointment,
     };
 
-    Axios.put(`/api/appointments/${id}`, appointment) // send the new appointment info to the server
+    return axios
+      .put(`/api/appointments/${id}`, appointment) // send the new appointment info to the server
       .then(() => {
-        console.log("State update check ", state);
-        setState({
-          ...state,
-          appointments
-        })
-      })
-      .catch((err) => {
-        console.log("Error message: ", err)
-      })
-    }
+        setState({ ...state, appointments });
+      });
+  }
+
+  /////----- DELETE -----/////
+  function cancelInterview(id) {
+    const appointment = {
+      // delete appointment
+      ...state.appointments[id],
+      interview: null,
+    };
+    const appointments = {
+      // add the new appointment to the list of appointments
+      ...state.appointments,
+      [id]: appointment,
+    };
+
+    return axios
+      .delete(`/api/appointments/${id}`) // send the delete id request to the server
+      .then(() => {
+        setState({ ...state, appointments });
+      });
+  }
 
   const schedule = appointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
@@ -89,6 +107,7 @@ export default function Application(props) {
         interview={interview}
         interviewers={interviewers}
         bookInterview={bookInterview} // prop name on left, what is being passed in on the right
+        cancelInterview={cancelInterview}
       />
     );
   });
