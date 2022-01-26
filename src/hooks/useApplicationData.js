@@ -51,11 +51,12 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment,
     };
+    const days = copyDayState(state.days, appointments);
 
     return axios
       .put(`/api/appointments/${id}`, appointment) // send the new appointment info to the server
       .then(() => {
-        setState({ ...state, appointments });
+        setState({ ...state, appointments, days }); //updateSpots is last variable here
       });
   }
 
@@ -69,12 +70,32 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment,
     };
+    const days = copyDayState(state.days, appointments);
 
     return axios
       .delete(`/api/appointments/${id}`) // send the delete id request to the server
       .then(() => {
-        setState({ ...state, appointments });
+        setState({ ...state, appointments, days }); //updateSpots is last variable here
       });
   }
+
+  /////----- UPDATE SPOTS -----/////
+  function updateSpots(day, appointments) {
+    let counter = 0;
+    day.appointments.forEach((id) => {
+      if (appointments[id].interview === null) {
+        counter++;
+      }
+    });
+    return counter;
+  }
+
+  function copyDayState(days, appointments) {
+    const dayArray = days.map((day) => {
+      return { ...day, spots: updateSpots(day, appointments) };
+    });
+    return dayArray;
+  }
+
   return { state, setState, setDay, bookInterview, cancelInterview };
 }

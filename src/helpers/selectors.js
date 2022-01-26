@@ -3,16 +3,16 @@
 
 /////----- GET APPOINTMENTS FOR DAY -----/////
 export function getAppointmentsForDay(state, day) {
-  const filteredAppointments = [];
+  let filteredAppointments = [];
 
-  const foundDay = state.days.find((weekday) => weekday.name === day);
+  let foundDay = state.days.find((weekday) => weekday.name === day);
 
   if (!foundDay) {
     return [];
   }
 
   foundDay.appointments.forEach((appointment) => {
-    const matchedAppointment = state.appointments[appointment];
+    let matchedAppointment = state.appointments[appointment];
     if (matchedAppointment) {
       filteredAppointments.push(matchedAppointment);
     }
@@ -44,7 +44,7 @@ const newObject = {
 /* Tristan to review Gabriel's suggested refactor as below
 export function getInterviewersForDay(state, day) {
   
-  const foundDay = state.days.find((weekday) => weekday.name === day); // {} | undefined
+  const foundDay = state.days.find((weekday) => weekday.name === day);
 
   if (!foundDay) {
     return [];
@@ -58,16 +58,16 @@ export function getInterviewersForDay(state, day) {
 } */
 
 export function getInterviewersForDay(state, day) {
-  const filteredInterviewers = [];
+  let filteredInterviewers = [];
 
-  const foundDay = state.days.find((weekday) => weekday.name === day); // {} | undefined
-
+  let foundDay = state.days.find((weekday) => weekday.name === day);
+  
   if (!foundDay) {
     return [];
   }
 
-  foundDay.interviewers.forEach((interviewer) => {
-    const matchedInterviewer = state.interviewers[interviewer];
+  foundDay.interviewers.forEach((interviewer) => { // foundDay should be an object, with foundDay.interviewers value is an array
+    let matchedInterviewer = state.interviewers[interviewer];
     if (matchedInterviewer) {
       filteredInterviewers.push(matchedInterviewer);
     }
@@ -75,3 +75,51 @@ export function getInterviewersForDay(state, day) {
 
   return filteredInterviewers;
 }
+
+
+
+
+// Gary's example for debugging
+/*
+export function getAppointmentsForDay(state, day) {
+  const appointments = [];
+  const foundDay = state.days
+  .find((weekday) => weekday.name === day)
+  
+    if (!foundDay) {
+    return [];
+  }
+  
+  foundDay.appointments.forEach((appointment) => {
+    const matchedAppointment = state.appointments[appointment]; // { id: 4, time: "3pm", interview: null } | undefined
+    if (matchedAppointment) {
+      appointments.push(matchedAppointment);
+      console.log(appointment)
+    }
+  });
+
+  return appointments;
+}
+
+//---get interviewers for day ---//
+export function getInterviewersForDay(state, day) {
+  
+  const foundDay = state.days
+  .find((weekday) => weekday.name === day)
+  
+    if (!foundDay) {
+      return []
+    };
+
+  const interviewers = [];
+
+  foundDay.interviewers.forEach((interviewer) => {
+    const matchedInterviewer = state.interviewers[interviewer];
+    if (matchedInterviewer) {
+      interviewers.push(matchedInterviewer);
+    }
+  });
+
+  return interviewers;
+}
+*/

@@ -103,13 +103,13 @@ export default function Appointment(props) {
       {mode === ERROR_SAVE && (
         <Error
           message="Could not save appointment. Please try again."
-          onCancel={back} // this links to the 'back' state & useVisualmode
+          onClose={back} // this links to the 'back' state & useVisualmode
         />
       )}
       {mode === ERROR_DELETE && (
         <Error
           message="Could not delete appointment. Please try again."
-          onCancel={back} // this links to the 'back' state & useVisualmode
+          onClose={back} // this links to the 'back' state & useVisualmode
         />
       )}
     </article>
