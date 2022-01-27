@@ -10,7 +10,6 @@ export default function useApplicationData() {
     cancelInterview: {},
   });
 
-  // const setDay = (day) => setState({ ...state, day }); // prior code before separation of concerns refactor
   const setDay = (day) => setState((prev) => ({ ...prev, day })); // added this as part of the separation of concerns refactor
 
   // Intital request to get all the data from the three endpoints, days, appointments, interviewers
@@ -51,12 +50,12 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment,
     };
-    const days = copyDayState(state.days, appointments);
+    const days = copyDayState(state.days, appointments); // this is update spots
 
     return axios
       .put(`/api/appointments/${id}`, appointment) // send the new appointment info to the server
       .then(() => {
-        setState({ ...state, appointments, days }); //updateSpots is last variable here
+        setState({ ...state, appointments, days }); //updateSpots is linked via the last variable here
       });
   }
 
@@ -70,7 +69,7 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment,
     };
-    const days = copyDayState(state.days, appointments);
+    const days = copyDayState(state.days, appointments); // this is update spots
 
     return axios
       .delete(`/api/appointments/${id}`) // send the delete id request to the server

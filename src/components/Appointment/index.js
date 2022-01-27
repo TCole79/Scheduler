@@ -35,7 +35,7 @@ export default function Appointment(props) {
     props
       .bookInterview(props.id, interview) // returns a promise
       .then(() => {
-        transition(SHOW); // this calls the transition function, with 'SHOW' as the argument
+        transition(SHOW);
       })
       .catch(() => {
         transition(ERROR_SAVE, true);
@@ -94,22 +94,22 @@ export default function Appointment(props) {
       {mode === EDIT && (
         <Form
           student={props.interview.student}
-          interviewer={props.interview.interviewer}
+          interviewer={props.interview.interviewer.id} // id is needed to correctly find and show the interviewers information during edit
           interviewers={props.interviewers}
           onSave={save}
-          onCancel={back} // this links to the 'back' state & useVisualmode
+          onCancel={back}
         />
       )}
       {mode === ERROR_SAVE && (
         <Error
           message="Could not save appointment. Please try again."
-          onClose={back} // this links to the 'back' state & useVisualmode
+          onClose={back}
         />
       )}
       {mode === ERROR_DELETE && (
         <Error
           message="Could not delete appointment. Please try again."
-          onClose={back} // this links to the 'back' state & useVisualmode
+          onClose={back}
         />
       )}
     </article>

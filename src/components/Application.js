@@ -13,8 +13,8 @@ export default function Application() {
   const { state, setDay, bookInterview, cancelInterview } =
     useApplicationData();
 
-  const interviewers = getInterviewersForDay(state, state.day); // get interviewers for each day specified
-  const appointments = getAppointmentsForDay(state, state.day); // get appointments for each day specified
+  const interviewers = getInterviewersForDay(state, state.day);
+  const appointments = getAppointmentsForDay(state, state.day);
 
   const schedule = appointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);

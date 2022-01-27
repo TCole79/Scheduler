@@ -19,12 +19,23 @@ export default function Form(props) {
   }
 
   function validate() {
+    if (student === "" && interviewer === null) {
+      // Even though Compass did not ask for this first if + &&, I added it because during my tests I found that leaving both fields empty crashes things.
+      setError(
+        "Student name cannot be blank, and interviewer must be selected"
+      );
+      return;
+    }
     if (student === "") {
       setError("Student name cannot be blank");
       return;
     }
+    if (interviewer === null) {
+      setError("You must select an interviewer");
+      return;
+    }
 
-    setError("");
+    setError(""); // this clears the error field
     props.onSave(student, interviewer);
   }
 
