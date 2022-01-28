@@ -46,4 +46,9 @@ npm run storybook
 
 ## Final Product 
 
-![]
+!["Monday snapshot"](https://github.com/TCole79/Scheduler/blob/master/docs/Interview%20-%20Monday%20Snapshot.png)
+!["Adding appointment"](https://github.com/TCole79/Scheduler/blob/master/docs/Interview%20-%20Adding%20Appointment.png)
+!["Added Tristan"](https://github.com/TCole79/Scheduler/blob/master/docs/Interview%20-%20Added%20Tristan.png)
+!["Cancel confirmation"](https://github.com/TCole79/Scheduler/blob/master/docs/Interview%20-%20Cancel%20Confirmation.png)
+!["Missing student error"](https://github.com/TCole79/Scheduler/blob/master/docs/Interview%20-%20Error%20Missing%20Student.png)
+!["Missing interviewer error"](https://github.com/TCole79/Scheduler/blob/master/docs/Interview%20-%20Error%20Missing%20Interviewer.png)
